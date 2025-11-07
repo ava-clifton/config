@@ -1,0 +1,5 @@
+lazy-lock.json
+__pycache__
+__init__.py
+*.swp
+*.swo
