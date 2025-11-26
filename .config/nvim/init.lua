@@ -22,6 +22,8 @@ vim.keymap.set('n', 'e', 'o<ESC>k')
 vim.keymap.set('n', 'E', 'O<ESC>j')
 vim.api.nvim_set_option("clipboard", "unnamedplus")
 vim.opt.directory = '.'
+vim.keymap.set('i', '<C-d>', '<Del>', { noremap = true })
+vim.keymap.set('x', 'p', '"_dP') -- yank without yanking replaced text
 vim.keymap.set('n', '<C-m>', '<C-o>') -- for working with tmux
 
 vim.cmd("syntax enable")
@@ -32,14 +34,14 @@ vim.o.cursorline = true
 vim.o.cursorcolumn = true
 
 -- Function to open a timestamped note
-local function vimnote()
+local function nvimnote()
   local timestamp = os.date("%Y_%m_%d__%H_%M_%S")
-  local filepath = string.format("%s/notes/note__%s.md", os.getenv("HOME"), timestamp)
+  local filepath = string.format("%s/data/notes/note__%s.md", os.getenv("HOME"), timestamp)
   vim.cmd.edit(filepath)
 end
 
--- Create the :Vimnote command
-vim.api.nvim_create_user_command("Nvimnote", vimnote, {})
+-- Create the :Nvimnote command
+vim.api.nvim_create_user_command("Nvimnote", nvimnote, {})
 
 ---------------------------------------------------
 ---------------- MANUAL LOADING -------------------
@@ -89,6 +91,24 @@ vim.diagnostic.config({
 vim.keymap.set('n', '<C-b>a', ':Org agenda a<CR>')
 vim.keymap.set('n', '<C-b>t', ':Org agenda t<CR>')
 vim.keymap.set('n', '<C-b>m', ':Org agenda M<CR>')
+
+
+require('orgmode').setup({
+  org_use_property_inheritance = true
+})
+
+
+vim.b.org_use_property_inheritance = true
+
+vim.api.nvim_set_hl(0, "@org.priority.default", {
+  bg = "#D0D000",
+  fg = "#000000",
+})
+
+vim.api.nvim_set_hl(0, "@org.priority.lowest", {
+  bg = "#00D000",
+  fg = "#000000",
+})
 
 ---------------------------------------------------
 ------------------ TELESCOPE ----------------------
